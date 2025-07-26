@@ -1,7 +1,8 @@
-import { NotesReducerActionTypes, type StatusType } from '../../types';
+import { NotesReducerActionTypes, StatusTypes, type StatusType } from '../../types';
 
 type Action =
     | { type: typeof NotesReducerActionTypes.SET_TEXT; payload: string }
+    | { type: typeof NotesReducerActionTypes.SET_INITIAL_TEXT; payload: string }
     | { type: typeof NotesReducerActionTypes.SET_STATUS; payload: StatusType }
     | { type: typeof NotesReducerActionTypes.SET_KEY; payload: string }
     | { type: typeof NotesReducerActionTypes.SET_KEY_VISIBILITY; payload: boolean };
@@ -15,12 +16,14 @@ type State = {
 
 function reducer(state: State, action: Action): State {
     switch (action.type) {
+        case NotesReducerActionTypes.SET_INITIAL_TEXT:
+            return { ...state, text: action.payload, status: StatusTypes.PRISTINE };
         case NotesReducerActionTypes.SET_TEXT:
             return { ...state, text: action.payload };
         case NotesReducerActionTypes.SET_STATUS:
             return { ...state, status: action.payload };
         case NotesReducerActionTypes.SET_KEY:
-            const re = /^[A-Za-z][A-Za-z0-9]*$/;
+            const re = /^[\w\d\s!@#$%^&*()\-_=+\[\]{};:'",.<>?|~`]*$/;
             if (!re.test(action.payload)) {
                 return state;
             }
