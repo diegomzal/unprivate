@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const { rateLimit } = require('express-rate-limit')
 const createNoteRoutes = require('./routes/note');
 
+const allowedOrigins = ['http://localhost:5173'];
+
 dotenv.config();
 
 const app = express();
@@ -23,7 +25,11 @@ app.get('/health', (req, res) => {
     res.send('OK');
 });
 
-app.use(cors());
+app.use(cors({
+	origins: "*", // temp
+	credentials: false,
+	methods: ['GET', 'POST'],
+}));
 app.use(express.json());
 app.use(limiter);
 
