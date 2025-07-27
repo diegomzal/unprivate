@@ -6,7 +6,8 @@ import { useDebounce } from "use-debounce";
 import { saveNote } from "../api/noteApi";
 import styled from "styled-components";
 import remarkGfm from 'remark-gfm'
-import { useTheme } from "./store/ThemeContext";
+import { useTheme } from "../store/ThemeContext";
+import { useNoteSocket } from "../hooks/useNoteSocket";
 
 const { TextArea } = Input;
 
@@ -19,6 +20,11 @@ type NoteInputProps = {
 function NoteInput({ dispatch, state, isPristine }: NoteInputProps) {
     const [debouncedText] = useDebounce(state.text, 500);
     const { theme } = useTheme();
+
+    useNoteSocket(state.key, (updatedNote) => {
+        dispatch({ type: NotesReducerActionTypes.SET_TEXT, payload: updatedNote });
+        isPristine.current = true;
+    });
 
     useEffect(() => {
         if (isPristine.current) {

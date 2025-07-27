@@ -2,7 +2,7 @@ import { ConfigProvider, Layout, theme } from "antd";
 import { GithubOutlined } from '@ant-design/icons';
 import Notes from './components/Notes';
 import styled from "styled-components";
-import { useTheme } from "./components/store/ThemeContext";
+import { useTheme } from "./store/ThemeContext";
 
 const { Content, Footer } = Layout;
 const { defaultAlgorithm, darkAlgorithm } = theme;

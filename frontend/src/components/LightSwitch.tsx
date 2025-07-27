@@ -1,7 +1,7 @@
 import { Switch } from "antd";
 import { MoonOutlined, SunOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { useTheme } from "./store/ThemeContext";
+import { useTheme } from "../store/ThemeContext";
 
 function LightSwitch() {
     const { theme, toggleTheme } = useTheme();

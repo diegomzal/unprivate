@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-function createNoteRoutes(redis) {
+function createNoteRoutes(redis, io) {
     router.get('/:key', async (req, res) => {
         try {
             const key = req.params.key;
@@ -26,6 +26,7 @@ function createNoteRoutes(redis) {
                 value: value,
                 updated_at: updatedAt
             })
+            io.to(key).emit('note_updated', { key });
             res.json({ success: true, updatedAt: updatedAt });
         } catch (err) {
             console.error('Error creating/updating entry:', err);

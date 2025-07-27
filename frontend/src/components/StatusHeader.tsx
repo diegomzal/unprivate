@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { NotesReducerActionTypes, StatusTypes, type Action, type State } from "../types";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { useTheme } from "./store/ThemeContext";
+import { useTheme } from "../store/ThemeContext";
 
 const { Text } = Typography;
 

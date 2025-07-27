@@ -1,6 +1,6 @@
 import { Divider, Spin, Typography } from "antd";
 import { useReducer, useRef } from "react";
-import reducer from "./store/NotesReducer";
+import reducer from "../store/NotesReducer";
 import { DefaultNotesState } from "../constants";
 import { StatusTypes } from "../types";
 import KeyInput from "./KeyInput";
@@ -8,7 +8,7 @@ import StatusHeader from "./StatusHeader";
 import NoteInput from "./NoteInput";
 import styled from "styled-components";
 import LightSwitch from "./LightSwitch";
-import { useTheme } from "./store/ThemeContext";
+import { useTheme } from "../store/ThemeContext";
 
 const { Title, Paragraph } = Typography;
 

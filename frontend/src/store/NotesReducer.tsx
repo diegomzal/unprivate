@@ -1,4 +1,4 @@
-import { NotesReducerActionTypes, StatusTypes, type Action, type State } from '../../types';
+import { NotesReducerActionTypes, StatusTypes, type Action, type State } from '../types';
 
 function reducer(state: State, action: Action): State {
     switch (action.type) {
