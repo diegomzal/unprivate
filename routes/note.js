@@ -19,6 +19,7 @@ function createNoteRoutes(redis, io) {
         try {
             const key = req.params.key;
             const value = req.body.value;
+            const socketId = req.body.socketId;
             if (!key || key.length > 128) return res.status(400).send('Invalid key');
             if (typeof value !== 'string') return res.status(400).send('Invalid value');
             const updatedAt = new Date().toISOString();
@@ -26,7 +27,7 @@ function createNoteRoutes(redis, io) {
                 value: value,
                 updated_at: updatedAt
             })
-            io.to(key).emit('note_updated', { key });
+            io.to(key).except(socketId).emit('note_updated', { key });
             res.json({ success: true, updatedAt: updatedAt });
         } catch (err) {
             console.error('Error creating/updating entry:', err);

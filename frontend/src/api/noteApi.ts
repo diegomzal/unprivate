@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { socket } from './socket';
 const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 const api = axios.create({
@@ -15,9 +16,10 @@ export const getNote = async (key: string) => {
     }
 };
 
-export const saveNote = async (key: string, text: string) => {
+export const saveNote = async (key: string, value: string) => {
     try {
-        const response = await api.post(`/api/note/${encodeURIComponent(key)}`, { value: text });
+        const socketId = socket.id;
+        const response = await api.post(`/api/note/${encodeURIComponent(key)}`, { value, socketId });
         return response.data;
     } catch (error) {
         console.error('Error saving note:', error);

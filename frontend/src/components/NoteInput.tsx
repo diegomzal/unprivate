@@ -23,7 +23,6 @@ function NoteInput({ dispatch, state, isPristine }: NoteInputProps) {
 
     useNoteSocket(state.key, (updatedNote) => {
         dispatch({ type: NotesReducerActionTypes.SET_TEXT, payload: updatedNote });
-        isPristine.current = true;
     });
 
     useEffect(() => {
