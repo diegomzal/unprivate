@@ -1,4 +1,4 @@
-import { Divider, Spin, Typography, ConfigProvider, theme } from "antd";
+import { Divider, Spin, Typography } from "antd";
 import { useReducer, useRef } from "react";
 import reducer from "./store/NotesReducer";
 import { DefaultNotesState } from "../constants";
@@ -7,7 +7,7 @@ import KeyInput from "./KeyInput";
 import StatusHeader from "./StatusHeader";
 import NoteInput from "./NoteInput";
 import styled from "styled-components";
-import Lightswitch from "./Lightswitch";
+import LightSwitch from "./LightSwitch";
 import { useTheme } from "./store/ThemeContext";
 
 const { Title, Paragraph } = Typography;
@@ -21,7 +21,7 @@ function Notes() {
       <Wrapper $dark={theme === "dark"}>
         <HeaderWrapper>
           <Title level={2} style={{ marginBottom: 0 }}>Unprivate Notes</Title>
-          <Lightswitch />
+          <LightSwitch />
         </HeaderWrapper>
         <Divider />
         <Paragraph>Just type a key, and you will get the value associated to that key. NOTE: Keep in mind that anyone with that key can view & edit the content.</Paragraph>
