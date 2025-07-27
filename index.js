@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const { rateLimit } = require('express-rate-limit')
 const createNoteRoutes = require('./routes/note');
 
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173', 'https://unprivate-frontend.vercel.app'];
 
 dotenv.config();
 
@@ -26,7 +26,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use(cors({
-	origins: "*", // temp
+	origins: allowedOrigins,
 	credentials: false,
 	methods: ['GET', 'POST'],
 }));
