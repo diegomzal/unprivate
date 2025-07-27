@@ -26,7 +26,7 @@ function createNoteRoutes(redis) {
                 value: value,
                 updated_at: updatedAt
             })
-            res.json({ success: true });
+            res.json({ success: true, updatedAt: updatedAt });
         } catch (err) {
             console.error('Error creating/updating entry:', err);
             res.status(500).json({ error: 'Server error' });

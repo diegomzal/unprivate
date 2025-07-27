@@ -1,6 +1,6 @@
 import { Layout, Menu } from "antd";
 import './App.css'
-import Notes from './components/notes/Notes';
+import Notes from './components/Notes';
 
 const { Header, Content, Footer } = Layout;
 
