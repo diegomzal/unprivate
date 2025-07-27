@@ -22,7 +22,7 @@ try {
     process.exit(1);
 }
 
-const allowedOrigins = ['http://localhost:5173', 'https://unprivate-frontend.vercel.app', '*.diegomz.com'];
+const allowedOrigins = ['http://localhost:5173', 'https://unprivate-frontend.vercel.app', 'http://unprivate.diegomz.com', 'https://unprivate.diegomz.com'];
 const PORT = config.PORT;
 
 const app = express();
