@@ -32,7 +32,7 @@ function KeyInput({dispatch, state, isPristine}: KeyInputProps) {
     return (
         <Flex gap={16} align='center' style={{ marginBottom: 16 }}>
             <Input
-                placeholder="Type key here"
+                placeholder="Type a key here. Can be anything!"
                 maxLength={128}
                 value={state.key}
                 disabled={state.status === StatusTypes.FETCHING}

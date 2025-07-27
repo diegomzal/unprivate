@@ -13,6 +13,8 @@ function reducer(state: State, action: Action): State {
             return { ...state, status: action.payload.status };
         case NotesReducerActionTypes.SET_KEY:
             return { ...state, key: action.payload };
+        case NotesReducerActionTypes.SET_MARKDOWN_TOGGLE:
+            return { ...state, showMarkdown: action.payload };
         default:
             return state;
     }

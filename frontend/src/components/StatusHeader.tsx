@@ -1,16 +1,20 @@
-import { Spin, Typography } from "antd";
+import { Spin, Typography, Switch } from "antd";
 import { useMemo } from "react";
-import { StatusTypes, type State } from "../types";
+import { NotesReducerActionTypes, StatusTypes, type Action, type State } from "../types";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { useTheme } from "./store/ThemeContext";
 
 const { Text } = Typography;
 
 type StatusHeaderProps = {
-  state: State;
+    state: State;
+    dispatch: React.Dispatch<Action>;
 };
 
-function StatusHeader({ state }: StatusHeaderProps) {
+function StatusHeader({ state, dispatch }: StatusHeaderProps) {
+    const { theme } = useTheme();
+
     const StatusText = useMemo(() => {
         switch (state.status) {
             case StatusTypes.SAVING:
@@ -43,7 +47,7 @@ function StatusHeader({ state }: StatusHeaderProps) {
     }, [state.updatedAt]);
 
     return (
-        <Wrapper>
+        <Wrapper $dark={theme === "dark"}>
             <StatusWrapper>
                 <Text strong>Status:</Text>
                 <span>{StatusText}</span>
@@ -52,21 +56,38 @@ function StatusHeader({ state }: StatusHeaderProps) {
                 <ClockCircleOutlined />
                 <span>Last updated: <b>{formattedDate}</b></span>
             </DateWrapper>
+            <ToggleWrapper>
+                <Switch 
+                    size="small" 
+                    style={{ marginRight: 4 }}
+                    checked={state.showMarkdown}
+                    onChange={(checked) => { dispatch({ type: NotesReducerActionTypes.SET_MARKDOWN_TOGGLE, payload: checked }) }} />
+                <span>Show Markdown</span>
+            </ToggleWrapper>
         </Wrapper>
     );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $dark?: boolean }>`
     margin-bottom: 16px;
     display: flex;
     align-items: center;
-    background: #f5f6fa;
+    background: ${({ $dark }) => ($dark ? '#23272e' : '#f5f6fa')};
+    color: ${({ $dark }) => ($dark ? '#f5f6fa' : 'inherit')};
     border-radius: 8px;
     padding: 14px 24px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
     gap: 24px;
     min-height: 56px;
-`
+    flex-wrap: wrap;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+    }
+`;
 
 const DateWrapper = styled.div`
     margin-left: auto;
@@ -75,12 +96,22 @@ const DateWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 6px;
+
+    @media (max-width: 600px) {
+        margin-left: 0;
+    }
 `;
 
 const StatusWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
+`;
+
+const ToggleWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 6px;
 `;
 
 export default StatusHeader;
