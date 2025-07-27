@@ -22,6 +22,7 @@ function NoteInput({ dispatch, state, isPristine }: NoteInputProps) {
     const { theme } = useTheme();
 
     useNoteSocket(state.key, (updatedNote) => {
+        isPristine.current = true;
         dispatch({ type: NotesReducerActionTypes.SET_TEXT, payload: updatedNote });
     });
 
