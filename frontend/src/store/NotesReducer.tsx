@@ -7,14 +7,16 @@ function reducer(state: State, action: Action): State {
         case NotesReducerActionTypes.SET_TEXT:
             return { ...state, text: action.payload };
         case NotesReducerActionTypes.SET_STATUS:
-            if (action.payload.status === StatusTypes.SAVED) {
-                return { ...state, status: action.payload.status, updatedAt: action.payload.updatedAt };
-            }
+            if (action.payload.status === StatusTypes.SAVED) return { ...state, status: action.payload.status, updatedAt: action.payload.updatedAt };
             return { ...state, status: action.payload.status };
         case NotesReducerActionTypes.SET_KEY:
             return { ...state, key: action.payload };
+        case NotesReducerActionTypes.SET_CURRENT_KEY:
+            return { ...state, currentKey: action.payload };
         case NotesReducerActionTypes.SET_MARKDOWN_TOGGLE:
             return { ...state, showMarkdown: action.payload };
+        case NotesReducerActionTypes.SET_IS_LIVE:
+            return { ...state, isLive: action.payload };
         default:
             return state;
     }

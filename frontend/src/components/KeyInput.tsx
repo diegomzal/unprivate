@@ -2,6 +2,7 @@ import { Button, Flex, Input } from "antd";
 import { NotesReducerActionTypes, StatusTypes, type Action, type NoteObject, type State } from "../types";
 import { getNote } from "../api/noteApi";
 import type { RefObject } from "react";
+import { useNoteSocket } from "../hooks/useNoteSocket";
 
 type KeyInputProps = {
   dispatch: React.Dispatch<Action>;
@@ -11,8 +12,20 @@ type KeyInputProps = {
 
 function KeyInput({dispatch, state, isPristine}: KeyInputProps) {
 
+    const handleUpdate = (updatedNote: string) => {
+        isPristine.current = true;
+        dispatch({ type: NotesReducerActionTypes.SET_TEXT, payload: updatedNote });
+    };
+
+    const handleLiveUpdate = (isLive: boolean) => {
+        dispatch({ type: NotesReducerActionTypes.SET_IS_LIVE, payload: isLive });
+    };
+
+    useNoteSocket(state.currentKey, handleUpdate, handleLiveUpdate);
+
     const submitKey = async () => {
         if (state.key) {
+            dispatch({ type: NotesReducerActionTypes.SET_CURRENT_KEY, payload: state.key });
             dispatch({ type: NotesReducerActionTypes.SET_STATUS, payload: {status: StatusTypes.FETCHING} });
             let response = await getNote(state.key);    
             isPristine.current = true;
@@ -28,6 +41,7 @@ function KeyInput({dispatch, state, isPristine}: KeyInputProps) {
         }
         dispatch({ type: NotesReducerActionTypes.SET_KEY, payload: key });
     };
+
 
     return (
         <Flex gap={16} align='center' style={{ marginBottom: 16 }}>

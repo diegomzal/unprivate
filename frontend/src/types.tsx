@@ -2,8 +2,10 @@ export const NotesReducerActionTypes = {
     SET_TEXT: 'SET_TEXT',
     SET_STATUS: 'SET_STATUS',
     SET_KEY: 'SET_KEY',
+    SET_CURRENT_KEY: 'SET_CURRENT_KEY',
     SET_INITIAL_TEXT: 'SET_INITIAL_TEXT',
-    SET_MARKDOWN_TOGGLE: 'SET_MARKDOWN_TOGGLE'
+    SET_MARKDOWN_TOGGLE: 'SET_MARKDOWN_TOGGLE',
+    SET_IS_LIVE: 'SET_IS_LIVE'
 } as const;
 
 export const StatusTypes = {
@@ -30,14 +32,18 @@ export type Action =
     | { type: typeof NotesReducerActionTypes.SET_INITIAL_TEXT; payload: NoteObject }
     | { type: typeof NotesReducerActionTypes.SET_STATUS; payload: StatusTypeObject }
     | { type: typeof NotesReducerActionTypes.SET_KEY; payload: string }
-    | { type: typeof NotesReducerActionTypes.SET_MARKDOWN_TOGGLE; payload: boolean };
+    | { type: typeof NotesReducerActionTypes.SET_CURRENT_KEY; payload: string }
+    | { type: typeof NotesReducerActionTypes.SET_MARKDOWN_TOGGLE; payload: boolean }
+    | { type: typeof NotesReducerActionTypes.SET_IS_LIVE; payload: boolean };
 
 export type State = {
     text: string;
     status: StatusType;
     key: string;
+    currentKey: string;
     updatedAt?: Date;
     showMarkdown: boolean;
+    isLive: boolean;
 };
 
 export type StatusType = keyof typeof StatusTypes;

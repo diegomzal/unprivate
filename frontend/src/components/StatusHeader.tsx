@@ -2,7 +2,7 @@ import { Spin, Typography, Switch } from "antd";
 import { useMemo } from "react";
 import { NotesReducerActionTypes, StatusTypes, type Action, type State } from "../types";
 import { ClockCircleOutlined } from "@ant-design/icons";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useTheme } from "../store/ThemeContext";
 
 const { Text } = Typography;
@@ -54,7 +54,16 @@ function StatusHeader({ state, dispatch }: StatusHeaderProps) {
             </StatusWrapper>
             <DateWrapper>
                 <ClockCircleOutlined />
-                <span>Last updated: <b>{formattedDate}</b></span>
+                <span>
+                    Last updated:{" "}
+                    {state.isLive ? (
+                        <LiveIndicator>
+                            <b>Live!</b>
+                        </LiveIndicator>
+                    ) : (
+                        <b>{formattedDate}</b>
+                    )}
+                </span>
             </DateWrapper>
             <ToggleWrapper>
                 <Switch 
@@ -112,6 +121,23 @@ const ToggleWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 6px;
+`;
+
+const pulse = keyframes`
+    0% { box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(82, 196, 26, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(82, 196, 26, 0); }
+`;
+
+const LiveIndicator = styled.span`
+    color: #52c41a;
+    font-weight: bold;
+    margin-left: 6px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    background: rgba(82, 196, 26, 0.08);
+    animation: ${pulse} 1.2s infinite;
+    display: inline-block;
 `;
 
 export default StatusHeader;

@@ -39,13 +39,36 @@ app.use(limiter);
 
 app.use('/api/note', createNoteRoutes(redis, io));
 
+function emitLiveStatus(key) {
+  const room = io.sockets.adapter.rooms.get(key);
+  const count = room ? room.size : 0;
+  io.to(key).emit('live', count > 1);
+}
+
 io.on('connection', (socket) => {
+  socket.joinedKeys = new Set();
+
   socket.on('subscribe_key', (key) => {
+    console.log(`Socket ${socket.id} subscribing to key: ${key}`);
+    if (typeof key !== 'string' || key.length > 128) return;
     socket.join(key);
+    socket.joinedKeys.add(key);
+    emitLiveStatus(key);
   });
 
   socket.on('unsubscribe_key', (key) => {
+    console.log(`Socket ${socket.id} unsubscribing from key: ${key}`);
+    if (typeof key !== 'string' || key.length > 128) return;
     socket.leave(key);
+    socket.joinedKeys.delete(key);
+    emitLiveStatus(key);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Socket ${socket.id} disconnected`);
+    for (const key of socket.joinedKeys) {
+      emitLiveStatus(key);
+    }
   });
 });
 

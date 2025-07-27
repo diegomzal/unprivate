@@ -7,8 +7,6 @@ import { saveNote } from "../api/noteApi";
 import styled from "styled-components";
 import remarkGfm from 'remark-gfm'
 import { useTheme } from "../store/ThemeContext";
-import { useNoteSocket } from "../hooks/useNoteSocket";
-
 const { TextArea } = Input;
 
 type NoteInputProps = {
@@ -21,11 +19,6 @@ function NoteInput({ dispatch, state, isPristine }: NoteInputProps) {
     const [debouncedText] = useDebounce(state.text, 500);
     const { theme } = useTheme();
 
-    useNoteSocket(state.key, (updatedNote) => {
-        isPristine.current = true;
-        dispatch({ type: NotesReducerActionTypes.SET_TEXT, payload: updatedNote });
-    });
-
     useEffect(() => {
         if (isPristine.current) {
             isPristine.current = false;
@@ -33,7 +26,7 @@ function NoteInput({ dispatch, state, isPristine }: NoteInputProps) {
         }
         if (debouncedText) {
             dispatch({ type: NotesReducerActionTypes.SET_STATUS, payload: { status: StatusTypes.SAVING } });
-            saveNote(state.key, debouncedText)
+            saveNote(state.currentKey, debouncedText)
                 .then((response) => {
                     dispatch({ type: NotesReducerActionTypes.SET_STATUS, payload: { status: StatusTypes.SAVED, updatedAt: response.updatedAt } });
                 })
