@@ -3,30 +3,43 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { createServer } = require('node:http');
-const { rateLimit } = require('express-rate-limit');
 const { Server } = require("socket.io");
+
+const validateEnv = require('./config/env');
+const SocketService = require('./services/socketService');
+const { globalLimiter, noteKeyLimiter } = require('./middleware/rateLimiter');
+const createHealthRoutes = require('./routes/health');
 const createNoteRoutes = require('./routes/note');
+const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
 
+let config;
+try {
+  config = validateEnv();
+} catch (error) {
+    console.error(error.message);
+    process.exit(1);
+}
+
 const allowedOrigins = ['http://localhost:5173', 'https://unprivate-frontend.vercel.app'];
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT;
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server, { cors: { origin: allowedOrigins } });
-const redis = new Redis(process.env.REDIS_URL);
 
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000,
-	limit: 100,
-	standardHeaders: 'draft-8',
-	legacyHeaders: false
-})
-
-app.get('/health', (req, res) => {
-    res.send('OK');
+const redis = new Redis(config.REDIS_URL, {
+    retryDelayOnFailover: 100,
+    maxRetriesPerRequest: 3,
+    lazyConnect: true
 });
+
+redis.on('error', (err) => {
+    console.error('Redis connection error:', err);
+});
+
+const socketService = new SocketService(io);
 
 app.use(cors({
 	origin: allowedOrigins,
@@ -34,43 +47,13 @@ app.use(cors({
 	methods: ['GET', 'POST', 'OPTIONS'],
 }));
 
-app.use(express.json());
-app.use(limiter);
+app.use(express.json({limit: '1mb'}));
+app.use(globalLimiter);
 
-app.use('/api/note', createNoteRoutes(redis, io));
+app.use('/health', createHealthRoutes(redis));
+app.use('/api/note', noteKeyLimiter, createNoteRoutes(redis, socketService));
 
-function emitLiveStatus(key) {
-  const room = io.sockets.adapter.rooms.get(key);
-  const count = room ? room.size : 0;
-  io.to(key).emit('live', count > 1);
-}
-
-io.on('connection', (socket) => {
-  socket.joinedKeys = new Set();
-
-  socket.on('subscribe_key', (key) => {
-    console.log(`Socket ${socket.id} subscribing to key: ${key}`);
-    if (typeof key !== 'string' || key.length > 128) return;
-    socket.join(key);
-    socket.joinedKeys.add(key);
-    emitLiveStatus(key);
-  });
-
-  socket.on('unsubscribe_key', (key) => {
-    console.log(`Socket ${socket.id} unsubscribing from key: ${key}`);
-    if (typeof key !== 'string' || key.length > 128) return;
-    socket.leave(key);
-    socket.joinedKeys.delete(key);
-    emitLiveStatus(key);
-  });
-
-  socket.on('disconnect', () => {
-    console.log(`Socket ${socket.id} disconnected`);
-    for (const key of socket.joinedKeys) {
-      emitLiveStatus(key);
-    }
-  });
-});
+app.use(errorHandler);
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
