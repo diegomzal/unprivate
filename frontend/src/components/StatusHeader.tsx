@@ -1,19 +1,16 @@
 import { Spin, Typography, Switch } from "antd";
 import { useMemo } from "react";
-import { NotesReducerActionTypes, StatusTypes, type Action, type State } from "../types";
+import { NotesReducerActionTypes, StatusTypes } from "../types";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import styled, { keyframes } from "styled-components";
 import { useTheme } from "../store/ThemeContext";
+import { useNotesContext } from "../store/NotesContext";
 
 const { Text } = Typography;
 
-type StatusHeaderProps = {
-    state: State;
-    dispatch: React.Dispatch<Action>;
-};
-
-function StatusHeader({ state, dispatch }: StatusHeaderProps) {
+function StatusHeader() {
     const { theme } = useTheme();
+    const { state, dispatch } = useNotesContext();
 
     const StatusText = useMemo(() => {
         switch (state.status) {

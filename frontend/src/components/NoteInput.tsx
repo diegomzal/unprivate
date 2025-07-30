@@ -3,21 +3,21 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import NoteEditorBar from './NoteEditorBar'
 import './NoteInput.css'
 import styled from 'styled-components'
-import { NotesReducerActionTypes, StatusTypes, type Action, type State } from '../types'
+import { NotesReducerActionTypes, StatusTypes } from '../types'
 import { useTheme } from '../store/ThemeContext'
 import { Input } from 'antd'
 import { useEffect, type RefObject } from 'react'
 import { useDebounce } from 'use-debounce'
 import { saveNote } from '../api/noteApi'
+import { useNotesContext } from '../store/NotesContext'
 
 type NoteInputProps = {
-    dispatch: React.Dispatch<Action>;
-    state: State;
     isPristine: RefObject<boolean>;
 };
 
-function NoteInput({ dispatch, state, isPristine }: NoteInputProps) {
+function NoteInput({ isPristine }: NoteInputProps) {
     const { theme } = useTheme();
+    const { state, dispatch } = useNotesContext();
     const { TextArea } = Input;
 
     const [debouncedText] = useDebounce(state.text, 500);

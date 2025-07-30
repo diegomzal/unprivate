@@ -1,7 +1,5 @@
 import { Divider, Spin, Typography } from "antd";
-import { useReducer, useRef } from "react";
-import reducer from "../store/NotesReducer";
-import { DefaultNotesState } from "../constants";
+import { useRef } from "react";
 import { StatusTypes } from "../types";
 import KeyInput from "./KeyInput";
 import StatusHeader from "./StatusHeader";
@@ -9,13 +7,14 @@ import NoteInput from "./NoteInput";
 import styled from "styled-components";
 import LightSwitch from "./LightSwitch";
 import { useTheme } from "../store/ThemeContext";
+import { useNotesContext } from "../store/NotesContext";
 
 const { Title, Paragraph } = Typography;
 
 function Notes() {
-  const [state, dispatch] = useReducer(reducer, DefaultNotesState);
   const isPristine = useRef(false);
   const { theme } = useTheme();
+  const { state } = useNotesContext();
 
   return (
       <Wrapper $dark={theme === "dark"}>
@@ -25,14 +24,14 @@ function Notes() {
         </HeaderWrapper>
         <Divider />
         <Paragraph>Just type a key, and you will get the value associated to that key. NOTE: Keep in mind that anyone with that key can view & edit the content.</Paragraph>
-        <KeyInput dispatch={dispatch} state={state} isPristine={isPristine} />
+        <KeyInput isPristine={isPristine} />
         {state.status === StatusTypes.FETCHING ? (
           <Spin size="large" style={{ display: 'block', margin: '40px auto' }} />
         ) : (
           state.status !== StatusTypes.IDLE && (
             <>
-              <StatusHeader state={state} dispatch={dispatch} />
-              <NoteInput dispatch={dispatch} state={state} isPristine={isPristine} />
+              <StatusHeader />
+              <NoteInput isPristine={isPristine} />
             </>
           )
         )}

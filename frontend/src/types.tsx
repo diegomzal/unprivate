@@ -53,3 +53,8 @@ export type ThemeContextType = {
   theme: Theme;
   toggleTheme: () => void;
 };
+
+export type NotesContextType = {
+  state: State;
+  dispatch: React.Dispatch<Action>;
+};

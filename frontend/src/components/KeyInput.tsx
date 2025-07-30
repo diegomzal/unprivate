@@ -1,16 +1,16 @@
 import { Button, Flex, Input } from "antd";
-import { NotesReducerActionTypes, StatusTypes, type Action, type NoteObject, type State } from "../types";
+import { NotesReducerActionTypes, StatusTypes, type NoteObject } from "../types";
 import { getNote } from "../api/noteApi";
 import type { RefObject } from "react";
 import { useNoteSocket } from "../hooks/useNoteSocket";
+import { useNotesContext } from "../store/NotesContext";
 
 type KeyInputProps = {
-  dispatch: React.Dispatch<Action>;
-  state: State;
   isPristine: RefObject<boolean>;
 };
 
-function KeyInput({dispatch, state, isPristine}: KeyInputProps) {
+function KeyInput({ isPristine }: KeyInputProps) {
+    const { state, dispatch } = useNotesContext();
 
     const handleUpdate = (updatedNote: string) => {
         isPristine.current = true;
@@ -26,7 +26,6 @@ function KeyInput({dispatch, state, isPristine}: KeyInputProps) {
     const submitKey = async () => {
         if (state.key) {
             dispatch({ type: NotesReducerActionTypes.SET_CURRENT_KEY, payload: state.key });
-            dispatch({ type: NotesReducerActionTypes.SET_STATUS, payload: {status: StatusTypes.FETCHING} });
             let response = await getNote(state.key);    
             isPristine.current = true;
             dispatch({ type: NotesReducerActionTypes.SET_INITIAL_TEXT, payload: { key: state.key, value: response.value || '', updatedAt: response.updatedAt } as NoteObject });
