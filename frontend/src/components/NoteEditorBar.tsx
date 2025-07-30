@@ -130,11 +130,27 @@ const BarWrapper = styled.div<{ $dark?: boolean }>`
   padding: 8px 6px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   margin-bottom: 12px;
+  @media (max-width: 600px) {
+    padding: 4px 2px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+  }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 6px;
+  gap: 10px;
+  flex-wrap: nowrap;
+  width: auto;
+  @media (max-width: 600px) {
+    width: 100%;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 100vw;
+    margin: 0 auto;
+    row-gap: 10px;
+  }
 `;
 
 const IconButton = styled.button<{ $active?: boolean, $dark?: boolean }>`
@@ -151,6 +167,7 @@ const IconButton = styled.button<{ $active?: boolean, $dark?: boolean }>`
   transition: background 0.15s, color 0.15s, box-shadow 0.15s;
   cursor: pointer;
   font-size: 18px;
+  margin-bottom: 0;
   &:hover:not(:disabled) {
     background: ${({ $dark }) => $dark ? '#31313a' : '#f0f5ff'};
     color: #1890ff;
@@ -158,6 +175,13 @@ const IconButton = styled.button<{ $active?: boolean, $dark?: boolean }>`
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  @media (max-width: 600px) {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 0;
   }
 `;
 
