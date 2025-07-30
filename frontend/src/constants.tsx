@@ -5,7 +5,7 @@ export const DefaultNotesState = {
     status: StatusTypes.IDLE,
     key: '',
     currentKey: '',
-    showMarkdown: true,
     darkMode: false,
-    isLive: false
+    isLive: false,
+    isRaw: false,
 } as const;

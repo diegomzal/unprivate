@@ -67,11 +67,12 @@ function StatusHeader({ state, dispatch }: StatusHeaderProps) {
             </DateWrapper>
             <ToggleWrapper>
                 <Switch 
-                    size="small" 
+                    size="small"
                     style={{ marginRight: 4 }}
-                    checked={state.showMarkdown}
-                    onChange={(checked) => { dispatch({ type: NotesReducerActionTypes.SET_MARKDOWN_TOGGLE, payload: checked }) }} />
-                <span>Show Markdown</span>
+                    checked={state.isRaw}
+                    onChange={checked => dispatch({ type: NotesReducerActionTypes.SET_IS_RAW, payload: checked })}
+                />
+                <span>Show Raw</span>
             </ToggleWrapper>
         </Wrapper>
     );

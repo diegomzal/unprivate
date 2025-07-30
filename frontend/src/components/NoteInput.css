@@ -1,0 +1,46 @@
+.tiptap > :first-child {
+  margin-top: 0;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+.tiptap ul li p,
+.tiptap ol li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.tiptap code {
+  background-color: #3eddf952;
+  border-radius: 0.4rem;
+  color: #222;
+  font-size: 0.85rem;
+  padding: 0.25em 0.3em;
+}
+.tiptap pre {
+  background: #222;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-family: 'JetBrainsMono', monospace;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+}
+.tiptap pre code {
+  background: none;
+  color: inherit;
+  font-size: 0.8rem;
+  padding: 0;
+}
+.tiptap blockquote {
+  border-left: 3px solid #d1d5db;
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+}
+.tiptap hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 2rem 0;
+}

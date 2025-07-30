@@ -13,10 +13,10 @@ function reducer(state: State, action: Action): State {
             return { ...state, key: action.payload };
         case NotesReducerActionTypes.SET_CURRENT_KEY:
             return { ...state, currentKey: action.payload };
-        case NotesReducerActionTypes.SET_MARKDOWN_TOGGLE:
-            return { ...state, showMarkdown: action.payload };
         case NotesReducerActionTypes.SET_IS_LIVE:
             return { ...state, isLive: action.payload };
+        case NotesReducerActionTypes.SET_IS_RAW:
+            return { ...state, isRaw: action.payload };
         default:
             return state;
     }
